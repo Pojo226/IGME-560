@@ -10,6 +10,7 @@ public class FishSpawner : MonoBehaviour {
 
 	public Vector2 spawnHeight;
 	public Vector2 spawnRadius;
+	public Vector2 spawnDelay;
 
 	// Use this for initialization
 	private void Start () {
@@ -31,7 +32,7 @@ public class FishSpawner : MonoBehaviour {
 				newFish.transform.localScale = Vector3.one;
 
 				newFish.GetComponent<FishController>().Init(i);
-				yield return new WaitForEndOfFrame();
+				yield return new WaitForSeconds(Random.Range(spawnDelay.x, spawnDelay.y));
 			}
 		}
 	}

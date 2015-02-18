@@ -49,6 +49,13 @@
      <Compile Include="Assets\Scripts\FishController.cs" />
      <Compile Include="Assets\Scripts\FishManager.cs" />
      <Compile Include="Assets\Scripts\FishSpawner.cs" />
+     <Compile Include="Assets\Scripts\FishTier1.cs" />
+     <Compile Include="Assets\Scripts\FishTier2.cs" />
+     <Compile Include="Assets\Scripts\FishTier3.cs" />
+     <Compile Include="Assets\Scripts\FishTier4.cs" />
+     <Compile Include="Assets\Scripts\Food.cs" />
+     <Compile Include="Assets\Scripts\Shelter.cs" />
+     <Compile Include="Assets\ScrollCookie.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity4.6.2/Unity4.6.2.app/Contents/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>

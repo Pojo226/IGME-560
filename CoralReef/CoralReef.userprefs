@@ -2,12 +2,19 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/FishController.cs">
     <Files>
-      <File FileName="Assets/Scripts/FishController.cs" Line="44" Column="2" />
-      <File FileName="Assets/Scripts/FishSpawner.cs" Line="29" Column="49" />
+      <File FileName="Assets/Scripts/FishTier2.cs" Line="79" Column="84" />
+      <File FileName="Assets/Scripts/FishController.cs" Line="116" Column="53" />
+      <File FileName="Assets/Scripts/FishTier1.cs" Line="26" Column="82" />
+      <File FileName="Assets/Scripts/FishTier3.cs" Line="26" Column="82" />
+      <File FileName="Assets/Scripts/FishTier4.cs" Line="26" Column="82" />
+      <File FileName="Assets/Scripts/FishSpawner.cs" Line="35" Column="79" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/james/School/IGME-560/CoralReef/Assets/Scripts/FishTier2.cs" line="7" />
+      <Breakpoint file="/Users/james/School/IGME-560/CoralReef/Assets/Scripts/FishTier2.cs" line="11" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
