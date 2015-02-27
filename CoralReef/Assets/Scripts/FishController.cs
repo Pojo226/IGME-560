@@ -75,8 +75,30 @@ public abstract class FishController : MonoBehaviour {
 		this.destinationObject = destinationObject;
 	}
 
+	public void SetDestination(Vector3 destination){
+		this.destination = destination;
+	}
+
 	private void CalculateMovement(){
-		dstBearing = Quaternion.LookRotation(destination - transform.position);
+		RaycastHit hit;
+		if(Physics.Raycast(transform.position, transform.forward, out hit, 5)){
+			Vector3 avoidance = Vector3.zero;
+			if(hit.normal.x > 0){
+				avoidance += -transform.right;
+			}else{
+				avoidance += transform.right;
+			}
+
+			if(hit.normal.y > 0){
+				avoidance += transform.up;
+			}else{
+				avoidance += -transform.up;
+			}
+
+			dstBearing = Quaternion.LookRotation(avoidance);
+		}else{
+			dstBearing = Quaternion.LookRotation(destination - transform.position);
+		}
 	}
 
 	//Decision events
