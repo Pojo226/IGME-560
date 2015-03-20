@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{4CF7D46A-DC09-BB4F-E8EB-C276630402A2}</ProjectGuid>
+	<ProjectGuid>{BA0AEBAA-2613-0740-2DF0-C650819356E6}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-Editor</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -46,23 +46,20 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\FishController.cs" />
-     <Compile Include="Assets\Scripts\FishManager.cs" />
-     <Compile Include="Assets\Scripts\FishSpawner.cs" />
-     <Compile Include="Assets\Scripts\FishTier1.cs" />
-     <Compile Include="Assets\Scripts\FishTier2.cs" />
-     <Compile Include="Assets\Scripts\FishTier3.cs" />
-     <Compile Include="Assets\Scripts\FishTier4.cs" />
-     <Compile Include="Assets\Scripts\Food.cs" />
-     <Compile Include="Assets\Scripts\Intents\FleeIntent.cs" />
-     <Compile Include="Assets\Scripts\Intents\FoodIntent.cs" />
-     <Compile Include="Assets\Scripts\Intents\IdleIntent.cs" />
-     <Compile Include="Assets\Scripts\Intents\ShelterIntent.cs" />
-     <Compile Include="Assets\Scripts\Shelter.cs" />
-     <Compile Include="Assets\ScrollCookie.cs" />
+     <Compile Include="Assets\Scripts\Editor\FishInspector.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity4.6.3/Unity4.6.3.app/Contents/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>/Applications/Unity4.6.3/Unity4.6.3.app/Contents/UnityExtensions/Unity/GUISystem/4.6.3/Editor/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>/Applications/Unity4.6.3/Unity4.6.3.app/Contents/Frameworks/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-vs.csproj">
+      <Project>{4CF7D46A-DC09-BB4F-E8EB-C276630402A2}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

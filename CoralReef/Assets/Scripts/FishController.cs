@@ -7,21 +7,22 @@ public abstract class FishController : MonoBehaviour {
 	public enum Fish_Hierarchy { Goldfish, Bass, Salmon, Tuna };
 	public Fish_Hierarchy fishType;
 
-	protected FishGenetics genetics;
-	protected FishVitals vitals;
+	public FishGenetics genetics;
+	public FishVitals vitals;
+	public FishVitals Vitals { get { return vitals; } }
 
-	protected List<Transform> shelters = new List<Transform>();
+	public FishIntent intent;
 
-	protected enum Destination_Types { Flee, Shelter, Food, Idle, None }
-	protected Destination_Types destinationType = Destination_Types.None;
+
 	protected GameObject destinationObject;
 	protected Vector3 destination = Vector3.up;
+	public delegate void DestinationArrive();
+	protected DestinationArrive onArrive;
+
+	protected bool sleeping = false;
 
 	protected Quaternion dstBearing;
 	protected float dstHeading;
-
-	protected float turnModifier = 1;
-	protected float forwardModifier = 1;
 
 	protected bool init;
 
@@ -31,6 +32,8 @@ public abstract class FishController : MonoBehaviour {
 		fishType = (Fish_Hierarchy)typeIndex;
 		genetics = FishGenetics.Create(fishType);
 		vitals = FishVitals.Create();
+		SetIntent(new IdleIntent());
+
 
 		CalculateMovement();
 
@@ -39,12 +42,22 @@ public abstract class FishController : MonoBehaviour {
 		init = true;
 	}
 
+	protected void SetIntent(FishIntent newIntent){
+		if(newIntent == null) newIntent = new IdleIntent();
+
+		if(intent == null || newIntent.intentPriority < intent.intentPriority){
+			intent = newIntent;
+			intent.fish = this;
+			intent.Seek();
+		}
+	}
+
 	private IEnumerator PerceptionCoroutine(){
 		while(true){
 			if(!CheckEnvironment()){ //Check if a hazard overrides everything.
-				//if(!CheckVitals()){ //Check if vitals are low.
-				Idle(); //Wander a bit.
-				//}
+				if(!CheckVitals()){ //Check if vitals are low.
+					SetIntent(new IdleIntent()); //Wander a bit.
+				}
 			}
 			
 			yield return new WaitForSeconds(genetics.perception);
@@ -56,48 +69,56 @@ public abstract class FishController : MonoBehaviour {
 
 		float turnRadius = ((360 / genetics.turnSpeed) / Mathf.PI) / 2;
 		if(Vector3.Distance(transform.position, destination) <= turnRadius){
-			destinationType = Destination_Types.None;
-//			do{
-//				destination = transform.parent.position + FishSpawner.GetRandomSpawnVector3();
-//			}while(Vector3.Distance(transform.position, destination) < 1);
+			SetIntent(null);
+			if(onArrive != null) onArrive();
 		}
-		
+
 		//if move
 		CalculateMovement();
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, dstBearing, genetics.turnSpeed * turnModifier * Time.deltaTime);
-		
-		transform.Translate(genetics.forwardSpeed * forwardModifier * Vector3.forward * Time.deltaTime);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, dstBearing, genetics.turnSpeed * intent.turnModifier * Time.deltaTime);
+		transform.Translate(genetics.forwardSpeed * intent.speedModifier * Vector3.forward * Time.deltaTime);
 	}
 
-	protected void SetDestination(Destination_Types dstType, Vector3 destination, GameObject destinationObject = null){
-		destinationType = dstType;
+	public void SetDestination(Vector3 destination, GameObject destinationObject = null, DestinationArrive onArrive = null){
 		this.destination = destination;
 		this.destinationObject = destinationObject;
-	}
-
-	public void SetDestination(Vector3 destination){
-		this.destination = destination;
+		this.onArrive = onArrive;
 	}
 
 	private void CalculateMovement(){
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, transform.forward, out hit, 5)){
-			Vector3 avoidance = Vector3.zero;
-			if(hit.normal.x > 0){
-				avoidance += -transform.right;
-			}else{
-				avoidance += transform.right;
+			if(hit.collider.gameObject != destinationObject){
+				Vector3 avoidance = Vector3.zero;
+				if(hit.normal.x > 0){
+					avoidance += -transform.right;
+				}else{
+					avoidance += transform.right;
+				}
+				
+				if(hit.normal.y > 0){
+					avoidance += transform.up;
+				}else{
+					avoidance += -transform.up;
+				}
+				
+				dstBearing = Quaternion.LookRotation(avoidance);
+				return;
 			}
+		}
+		dstBearing = Quaternion.LookRotation(destination - transform.position);
+	}
 
-			if(hit.normal.y > 0){
-				avoidance += transform.up;
-			}else{
-				avoidance += -transform.up;
-			}
-
-			dstBearing = Quaternion.LookRotation(avoidance);
+	public virtual void Sleep(){
+		if(!sleeping){
+			SetIntent(null);
+			sleeping = true;
+			enabled = false;
+			Invoke("Sleep", 2.0f);
 		}else{
-			dstBearing = Quaternion.LookRotation(destination - transform.position);
+			sleeping = false;
+			enabled = true;
+			vitals.energy = 10;
 		}
 	}
 
@@ -105,21 +126,20 @@ public abstract class FishController : MonoBehaviour {
 	protected abstract bool CheckEnvironment();
 	protected virtual bool CheckVitals(){
 		if(vitals.energy <= 4){
-			FindShelter();
+			if(vitals.energy <= 0){
+				Sleep();
+			}else{
+				SetIntent(new ShelterIntent());
+			}
 			return true;
 		}
 		if(vitals.hunger <= 5){
-			FindFood();
+			SetIntent(new FoodIntent());
 			return true;
 		}
 		return false;
 	}
 
-	//Targeting events
-	protected abstract void FindShelter();
-	protected abstract void FindFood();
-	protected abstract void Idle();
-	
 	public static Vector3 GenerateRandomPoint(Vector3 location, float maxDistance){
 		Vector3 point = location + new Vector3(Random.Range(-maxDistance, maxDistance), Random.Range(-maxDistance, maxDistance), Random.Range(-maxDistance, maxDistance));
 		point.x = Mathf.Min(Mathf.Abs(point.x), 20) * Mathf.Sign(point.x);
@@ -134,7 +154,8 @@ public struct FishGenetics {
 
 	public float turnSpeed;
 	public float forwardSpeed;
-	
+
+	public static readonly float[] Speed = { 1, 1.1f, 1.2f, 1.3f, 1.4f };
 	public static readonly float[] Sight = { 6, 7, 8, 9 };
 	public static readonly float[] Perception = { 1.5f, 1.0f, 0.5f, 0.5f };
 	
@@ -148,7 +169,7 @@ public struct FishGenetics {
 		FishGenetics data = new FishGenetics();
 
 		data.turnSpeed = 25;
-		data.forwardSpeed = 1;
+		data.forwardSpeed = Speed[typeIndex];
 
 		data.sight = Sight[typeIndex];
 		data.perception = Perception[typeIndex];
@@ -174,8 +195,19 @@ public struct FishVitals {
 	}
 
 	public void Degrade(){
-		return; //TEMPORARY
 		hunger -= .3f * Time.deltaTime;
 		energy -= .1f * Time.deltaTime;
 	}
+}
+
+public abstract class FishIntent {
+
+	public FishController fish;
+
+	public float intentPriority = 0;
+	public float speedModifier = 1;
+	public float turnModifier = 1;
+
+	public abstract void Seek();
+	
 }

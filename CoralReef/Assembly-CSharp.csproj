@@ -54,6 +54,10 @@
      <Compile Include="Assets\Scripts\FishTier3.cs" />
      <Compile Include="Assets\Scripts\FishTier4.cs" />
      <Compile Include="Assets\Scripts\Food.cs" />
+     <Compile Include="Assets\Scripts\Intents\FleeIntent.cs" />
+     <Compile Include="Assets\Scripts\Intents\FoodIntent.cs" />
+     <Compile Include="Assets\Scripts\Intents\IdleIntent.cs" />
+     <Compile Include="Assets\Scripts\Intents\ShelterIntent.cs" />
      <Compile Include="Assets\Scripts\Shelter.cs" />
      <Compile Include="Assets\ScrollCookie.cs" />
  <Reference Include="UnityEngine.UI">

@@ -1,8 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/FishController.cs">
     <Files>
-      <File FileName="Assets/Scripts/FishController.cs" Line="67" Column="71" />
+      <File FileName="Assets/Scripts/FishController.cs" Line="74" Column="4" />
+      <File FileName="Assets/Scripts/Intents/ShelterIntent.cs" Line="13" Column="17" />
+      <File FileName="Assets/Scripts/Intents/FleeIntent.cs" Line="10" Column="17" />
+      <File FileName="Assets/Scripts/Intents/FoodIntent.cs" Line="10" Column="17" />
+      <File FileName="Assets/Scripts/Intents/IdleIntent.cs" Line="4" Column="1" />
+      <File FileName="Assets/Scripts/FishTier1.cs" Line="9" Column="4" />
+      <File FileName="Assets/Scripts/FishTier2.cs" Line="14" Column="35" />
+      <File FileName="Assets/Scripts/FishTier3.cs" Line="14" Column="35" />
+      <File FileName="Assets/Scripts/FishTier4.cs" Line="14" Column="35" />
+      <File FileName="Assets/Scripts/Editor/FishInspector.cs" Line="18" Column="52" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
