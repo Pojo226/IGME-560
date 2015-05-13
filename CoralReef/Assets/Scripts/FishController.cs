@@ -45,6 +45,10 @@ public abstract class FishController : MonoBehaviour {
 	protected void SetIntent(FishIntent newIntent){
 		if(newIntent == null) newIntent = new IdleIntent();
 
+		if(intent != null){
+			Debug.LogWarning(newIntent + "\t" + newIntent.intentPriority + "\t" + intent.intentPriority);
+			Debug.LogWarning(intent == null || newIntent.intentPriority < intent.intentPriority);
+		}
 		if(intent == null || newIntent.intentPriority < intent.intentPriority){
 			intent = newIntent;
 			intent.fish = this;
@@ -150,29 +154,62 @@ public abstract class FishController : MonoBehaviour {
 }
 
 
-public struct FishGenetics {
+public class FishGenetics {
 
 	public float turnSpeed;
 	public float forwardSpeed;
 
+#if GENETIC_ALGORITHMS
+	//Variances are used by GA's to offset bases based on fish level as well
+	//	as a mutation factor, both which use the variance. This way the fastest
+	//	possible gen1 fish can only be as fast as the next level's base.
+	public static readonly float TurnSpeedBase = 25;
+	public static readonly float TurnSpeedVariance = 2;
+
+	public static readonly float SpeedBase = 1;
+	public static readonly float SpeedVariance = 0.2f;
+
+	public static readonly float SightBase = 6;
+	public static readonly float SightVariance = 1;
+
+	public static readonly float PerceptionBase = 1.5f;
+	public static readonly float PerceptionVariance = -0.25f;
+#else
+	public static readonly float[] TurnSpeed = { 25, 27.5f, 30, 32.5f, 35 };
 	public static readonly float[] Speed = { 1, 1.1f, 1.2f, 1.3f, 1.4f };
 	public static readonly float[] Sight = { 6, 7, 8, 9 };
 	public static readonly float[] Perception = { 1.5f, 1.0f, 0.5f, 0.5f };
-	
+#endif
+
 	public float sight;
 	public float perception;
 	
-	
-	public static FishGenetics Create(FishController.Fish_Hierarchy fish){
+	public static FishGenetics Create(FishController.Fish_Hierarchy fish, FishGenetics geneticsA = null, FishGenetics geneticsB = null){
 		int typeIndex = (int)fish;
 
 		FishGenetics data = new FishGenetics();
 
-		data.turnSpeed = 25;
-		data.forwardSpeed = Speed[typeIndex];
 
+#if GENETIC_ALGORITHMS
+		if(geneticsA == null || geneticsB == null){ //If program start, randomly set values
+			data.turnSpeed = TurnSpeedBase + typeIndex*TurnSpeedVariance + Random.Range(-TurnSpeedVariance/2, TurnSpeedVariance/2);
+			data.forwardSpeed = SpeedBase + typeIndex*SpeedVariance + Random.Range(-SpeedVariance/2, SpeedVariance/2);
+			data.sight = SightBase + typeIndex*SightVariance + Random.Range(-SightVariance/2, SightVariance/2);
+			data.perception = PerceptionBase + typeIndex*PerceptionVariance + Random.Range(-PerceptionVariance/2, PerceptionVariance/2);
+		}else{ //If spawning from breeding, random pick based influenced by the two values, and shuffle a bit
+			data.turnSpeed = Random.Range(geneticsA.turnSpeed, geneticsB.turnSpeed) + Random.Range(-TurnSpeedVariance/2, TurnSpeedVariance/2);
+			data.forwardSpeed = Random.Range(geneticsA.forwardSpeed, geneticsB.forwardSpeed) + Random.Range(-SpeedVariance/2, SpeedVariance/2);
+			data.sight = Random.Range(geneticsA.sight, geneticsB.sight) + Random.Range(-SightVariance/2, SightVariance/2);
+			data.perception = Random.Range(geneticsA.perception, geneticsB.perception) + Random.Range(-PerceptionVariance/2, PerceptionVariance/2);
+		}
+#else
+		data.GeneticCode = typeIndex * 1000 + typeIndex * 100 + typeIndex * 10 + typeIndex;
+		data.turnSpeed = TurnSpeed[typeIndex];
+		data.forwardSpeed = Speed[typeIndex];
+		
 		data.sight = Sight[typeIndex];
 		data.perception = Perception[typeIndex];
+#endif
 
 		return data;
 	}

@@ -2,20 +2,18 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/FishController.cs">
     <Files>
-      <File FileName="Assets/Scripts/FishController.cs" Line="74" Column="4" />
-      <File FileName="Assets/Scripts/Intents/ShelterIntent.cs" Line="13" Column="17" />
-      <File FileName="Assets/Scripts/Intents/FleeIntent.cs" Line="10" Column="17" />
-      <File FileName="Assets/Scripts/Intents/FoodIntent.cs" Line="10" Column="17" />
-      <File FileName="Assets/Scripts/Intents/IdleIntent.cs" Line="4" Column="1" />
-      <File FileName="Assets/Scripts/FishTier1.cs" Line="9" Column="4" />
-      <File FileName="Assets/Scripts/FishTier2.cs" Line="14" Column="35" />
-      <File FileName="Assets/Scripts/FishTier3.cs" Line="14" Column="35" />
-      <File FileName="Assets/Scripts/FishTier4.cs" Line="14" Column="35" />
-      <File FileName="Assets/Scripts/Editor/FishInspector.cs" Line="18" Column="52" />
+      <File FileName="Assets/Scripts/FishController.cs" Line="53" Column="1" />
+      <File FileName="Assets/Scripts/FishManager.cs" Line="53" Column="39" />
+      <File FileName="Assets/Scripts/Intents/FoodIntent.cs" Line="45" Column="85" />
+      <File FileName="Assets/Scripts/FishSpawner.cs" Line="36" Column="37" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/james/School/IGME-560/CoralReef/Assets/Scripts/FishController.cs" line="57" />
+      <Breakpoint file="/Users/james/School/IGME-560/CoralReef/Assets/Scripts/FishController.cs" line="46" />
+      <Breakpoint file="/Users/james/School/IGME-560/CoralReef/Assets/Scripts/FishController.cs" line="49" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

@@ -31,7 +31,9 @@ public class FishSpawner : MonoBehaviour {
 				newFish.transform.parent = transform;
 				newFish.transform.localScale = Vector3.one;
 
-				newFish.GetComponent<FishController>().Init(i);
+				FishController fishBrains = newFish.GetComponent<FishController>();
+				fishBrains.Init(i);
+				FishManager.AddFish(fishBrains);
 				yield return new WaitForSeconds(Random.Range(spawnDelay.x, spawnDelay.y));
 			}
 		}

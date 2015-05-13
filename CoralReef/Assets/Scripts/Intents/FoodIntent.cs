@@ -42,6 +42,7 @@ public class FoodIntent : FishIntent {
 				if(nearestFood){
 					if(distance <= 1){
 						fish.vitals.hunger = 10;
+						FishManager.RemoveFish(nearestFood.gameObject.GetComponent<FishController>());
 						GameObject.Destroy(nearestFood.gameObject);
 					}else{
 						fish.SetDestination(nearestFood.transform.position, nearestFood.gameObject);
