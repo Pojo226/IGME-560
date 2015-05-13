@@ -3,7 +3,7 @@ using System.Collections;
 
 public class IdleIntent : FishIntent {
 	
-	public float intentPriority = 3;
+	public override float intentPriority { get { return 3; } }
 	public float speedModifier = 1f;
 	public float turnModifier = 1f;
 

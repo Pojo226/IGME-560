@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FoodIntent : FishIntent {
 	
-	public float intentPriority = 2;
+	public override float intentPriority { get { return 2; } }
 	public float speedModifier = 1.5f;
 	public float turnModifier = 1.5f;
 
@@ -21,15 +21,15 @@ public class FoodIntent : FishIntent {
 			}
 			fish.SetDestination(nearest.transform.position, nearest.gameObject, ArriveFood);
 		}else{
-			Collider[] colliders = Physics.OverlapSphere(fish.transform.position, fish.genetics.sight);
+			Collider[] colliders = Physics.OverlapSphere(fish.transform.position, fish.genetics.sight * 3);
 			if(colliders.Length > 0){
 				Collider nearestFood = null;
-				float distance = fish.genetics.perception + 100;
+				float distance = fish.genetics.sight + 100;
 				
 				foreach(Collider nearby in colliders){
 					FishController fishy = nearby.GetComponent<FishController>();
 					if(fishy){
-						if(fishy.fishType == fish.fishType - 1){
+						if(fishy.fishType == fish.fishType - 1 || fishy.fishType == fish.fishType - 2){
 							float testDist = Vector3.Distance(fish.transform.position, nearby.transform.position);
 							if(testDist < distance){
 								distance = testDist;
@@ -45,17 +45,18 @@ public class FoodIntent : FishIntent {
 						FishManager.RemoveFish(nearestFood.gameObject.GetComponent<FishController>());
 						GameObject.Destroy(nearestFood.gameObject);
 					}else{
-						fish.SetDestination(nearestFood.transform.position, nearestFood.gameObject);
+						fish.SetDestination(fish.transform.position +  (nearestFood.transform.position - fish.transform.position) / 4, nearestFood.gameObject, Seek);
 					}
 					return;
 				}
 			}
-			
-			fish.SetDestination(FishController.GenerateRandomPoint(fish.transform.position, 2));
+
+			fish.ClearIntent();
 		}
 	}
 
 	protected void ArriveFood(){
 		fish.vitals.hunger = 10;
+		fish.ClearIntent();
 	}
 }

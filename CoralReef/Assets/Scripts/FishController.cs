@@ -45,16 +45,17 @@ public abstract class FishController : MonoBehaviour {
 	protected void SetIntent(FishIntent newIntent){
 		if(newIntent == null) newIntent = new IdleIntent();
 
-		if(intent != null){
-			Debug.LogWarning(newIntent + "\t" + newIntent.intentPriority + "\t" + intent.intentPriority);
-			Debug.LogWarning(intent == null || newIntent.intentPriority < intent.intentPriority);
-		}
 		if(intent == null || newIntent.intentPriority < intent.intentPriority){
 			intent = newIntent;
 			intent.fish = this;
 			intent.Seek();
 		}
 	}
+
+	public void ClearIntent(){
+		intent = new IdleIntent();
+	}
+
 
 	private IEnumerator PerceptionCoroutine(){
 		while(true){
@@ -70,6 +71,8 @@ public abstract class FishController : MonoBehaviour {
 	
 	private void Update(){
 		vitals.Degrade();
+
+		Debug.DrawLine(transform.position, destination, Color.green);
 
 		float turnRadius = ((360 / genetics.turnSpeed) / Mathf.PI) / 2;
 		if(Vector3.Distance(transform.position, destination) <= turnRadius){
@@ -123,6 +126,7 @@ public abstract class FishController : MonoBehaviour {
 			sleeping = false;
 			enabled = true;
 			vitals.energy = 10;
+			ClearIntent();
 		}
 	}
 
@@ -164,7 +168,7 @@ public class FishGenetics {
 	//	as a mutation factor, both which use the variance. This way the fastest
 	//	possible gen1 fish can only be as fast as the next level's base.
 	public static readonly float TurnSpeedBase = 25;
-	public static readonly float TurnSpeedVariance = 2;
+	public static readonly float TurnSpeedVariance = 5;
 
 	public static readonly float SpeedBase = 1;
 	public static readonly float SpeedVariance = 0.2f;
@@ -241,7 +245,7 @@ public abstract class FishIntent {
 
 	public FishController fish;
 
-	public float intentPriority = 0;
+	public virtual float intentPriority { get { return 0; } }
 	public float speedModifier = 1;
 	public float turnModifier = 1;
 

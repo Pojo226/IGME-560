@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ShelterIntent : FishIntent {
 
-	public float intentPriority = 1;
+	public override float intentPriority { get { return 1; } }
 	public float speedModifier = 1.25f;
 	public float turnModifier = 1.25f;
 

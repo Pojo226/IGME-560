@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FleeIntent : FishIntent {
 	
-	public float intentPriority = 0;
+	public override float intentPriority { get { return 0; } }
 	public float speedModifier = 1.5f;
 	public float turnModifier = 1.5f;
 	
